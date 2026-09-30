@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Drama Pro - Instan Voice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .script-row {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #eef2f1;
+            background: #fff;
+            transition: background 0.2s;
+        }
+        .script-row:hover {
+            background: #fafafa;
+        }
+        .btn-play {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            min-width: 65px;
+            margin-right: 15px;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+        }
+        .btn-play:hover {
+            background-color: #0056b3;
+        }
+        .user-label {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 45px;
+            margin-right: 15px;
+            box-shadow: 0 2px 4px rgba(40,167,69,0.2);
+        }
+        .character-name {
+            font-weight: bold;
+            min-width: 140px;
+            color: #0056b3;
+            font-size: 15px;
+            padding-top: 4px;
+        }
+        .character-name.user {
+            color: #28a745;
+        }
+        .dialogue-text {
+            color: #333;
+            font-size: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
+            padding-top: 4px;
+        }
+        .dialogue-text.user-text {
+            font-style: italic;
+            color: #555;
+        }
+        .scene-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 26px 0 12px;
+        }
+        .scene-divider::before,
+        .scene-divider::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, #dfe9eb, #6aa5b1, #dfe9eb);
+            border-radius: 999px;
+        }
+        .scene-divider span {
+            background: #eaf7f8;
+            color: #0d5c63;
+            border: 1px solid #cfeaf0;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Drama Computer Maintenance and Troubleshooting: A Lesson from the Office.</h1>
+    <div class="subtitle">Klik tombol PLAY untuk mendengarkan suara aktor</div>
+    
+    <div id="script-container"></div>
+</div>
+
+<script>
+    // --- 1. DATA NASKAH DRAMA ---
+    // Silakan ganti bagian teks dialog di bawah ini dengan naskah asli Anda.
+    // Properti 'gender': 'male' (suara pria) atau 'female' (suara wanita).
+    // Jika itu giliran Anda, ganti properti 'isUser': true.
+    const naskah = [
+        { name: "Narrator (Scene 1: In the Office)", dialogue: "Good morning, everyone. This is our drama. The title is ,Computer Maintenance and Troubleshooting: A Lesson from the Office. Komang, Aston, and Yusuf work in an office. They use computers every day. But some bad habits make problems. Let's watch.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "I am busy. I write a report. Mmm, these chips are good. I am hungry.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Komang, what are you doing? You eat snacks near your computer?", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Yes. I am hungry. I can work better when I eat.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "That is not good. Small pieces of food can go inside the computer. This can make problems. Please eat in the pantry.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "OK, OK. It is only a little food. No problem.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Oh no! I need Microsoft Office for my work. But my computer does not have it.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "You can ask IT. They can give you a real program.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "That is slow. I have an idea. I can download it from a free website.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Please don't do that, Yusuf. That website is not safe. The file can have a virus.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Don't worry, Aston. I do this before. It is OK.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Look at the time! It is lunch time now. Let's go to the canteen.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Good idea. Let's go.", gender: "male", isUser: false },
+        { name: "Narrator (Scene 2: Back in the Office)", dialogue: "Now it is lunch time. Komang, Aston, and Yusuf go to the canteen. They leave their computers on. Yusuf's download is still running. But after lunch, they will have a big surprise. Let's watch.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "What? My computer is off! I did not turn it off. I push the button many times. Nothing happens!", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "My computer is frozen! I cannot move the mouse. Nothing works!", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Please stay calm. Don't push the buttons more. We must go to the service center. A technician can check the computers.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Maybe it is because of my food?", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Maybe. Let's ask the technician.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "And my computer? I only download one file...", gender: "male", isUser: false },
+        { name: "Narrator (Scene 3: The Hardware Service Center)", dialogue: "The three staff take their computers to the service center. There, they meet Mr. Suartana. He is a hardware technician. Can he help Komang? And can he help Yusuf too? Let's watch.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Good afternoon. Welcome to the Hardware Service Center. How can I help you?", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Good afternoon, Mr. Suartana. Two computers have problems. Komang's computer is off. Yusuf's computer is frozen.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "I see. Yusuf, please tell me. What happened to your computer?", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Before lunch, I download Microsoft Office from a free website. Now my computer is frozen.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "I think this is a software problem. I only fix hardware. Please go to Mr. Pasek. He is the software technician. His room is next to mine.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Thank you, Mr. Suartana. I go there now.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Now, Komang. What did you do before your computer turned off?", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "I typed a report. I ate snacks too. After lunch, the computer is off.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Let me check. First, I check the power. The power is OK. But look! There are food pieces and ants inside your computer!", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Ants? Inside my computer? That is terrible!", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "The food pieces bring the ants. The ants walk on the parts inside. This makes a short circuit. So the computer turns off. This protects the computer from more damage.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "So this is because of the food. I tell you before, Komang!", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "You are right, Aston. I am sorry. Can you fix it, Mr. Suartana?", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Yes, I can. I clean the ants and the food. I clean the fan and other parts with a small brush. Then I test the computer.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Finished! The computer works well now. Remember: don't eat or drink near your computer. Clean your computer often. This is called preventive maintenance. It stops problems before they happen.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Thank you very much, Mr. Suartana. Now I understand. I will eat only in the canteen.", gender: "male", isUser: false },
+        { name: "Aston", dialogue: "Thank you, Mr. Suartana. We will tell other people in the office too.", gender: "male", isUser: false },
+        { name: "Narrator (Scene 4: The Software Service Room)", dialogue: "Komang's computer is fixed now. But Yusuf still has a problem. He goes to the software room. Can the technician fix his frozen computer? Let's watch.", gender: "male", isUser: false },
+        { name: "Pasek", dialogue: "Good afternoon. Welcome to the Software Service Room. How can I help you?", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Good afternoon, Mr. Pasek. Mr. Suartana sends me here. I download Microsoft Office from a free website. Now my computer is frozen.", gender: "male", isUser: false },
+        { name: "Pasek", dialogue: "I see. Let me check. I run an antivirus scan. I check the system too.", gender: "male", isUser: false },
+        { name: "Pasek", dialogue: "Yes, I find the problem. The free file has a virus. The virus makes damage inside the computer. This is why your computer is frozen. Free websites are not safe.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Is it serious? Do I lose my files?", gender: "male", isUser: false },
+        { name: "Pasek", dialogue: "Don't worry. First, I save your files. Then I remove the virus. I fix the system. This takes a few minutes.", gender: "male", isUser: false },
+        { name: "Pasek", dialogue: "Finished! Your computer works well now. I put a real Microsoft Office on your computer too. Remember: a free program from the internet is not safe. It can have a virus. It can steal your data. Always use a real program. Update your computer often. Use antivirus too.", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Thank you very much, Mr. Pasek. I am sorry. Aston tells me before, but I don't listen. Now I understand. I will always use real programs.", gender: "male", isUser: false },
+        { name: "Pasek", dialogue: "Good job. Remember: a little care can save a lot of trouble. It is always better to prevent a problem.", gender: "male", isUser: false },
+        { name: "Narrator", dialogue: "So, the office staff learn an important lesson. Food near a computer can make big problems. Free programs from the internet can be dangerous too. When we take care of our computers and use real programs, our work is safe and easy. Thank you for watching our drama!", gender: "male", isUser: false },
+    ];
+
+    const container = document.getElementById('script-container');
+
+    // --- 2. RENDER HALAMAN ---
+    naskah.forEach((item, index) => {
+        const sceneMatch = (item.name + ' ' + item.dialogue).match(/Scene\s+\d+/i);
+        if (item.name.toLowerCase().includes('narrator') && sceneMatch) {
+            const divider = document.createElement('div');
+            divider.className = 'scene-divider';
+            const label = document.createElement('span');
+            label.textContent = sceneMatch[0];
+            divider.appendChild(label);
+            container.appendChild(divider);
+        }
+
+        const row = document.createElement('div');
+        row.className = 'script-row';
+
+        // Bagian Tombol Play atau Label User
+        if (item.isUser) {
+            row.innerHTML = `<span class="user-label">USER</span>`;
+        } else {
+            row.innerHTML = `<button class="btn-play" onclick="playVoice('${item.dialogue.replace(/'/g, "\\'")}', '${item.gender}')">▶ Play</button>`;
+        }
+
+        // Bagian Nama & Teks Dialog
+        const nameClass = item.isUser ? 'character-name user' : 'character-name';
+        const textClass = item.isUser ? 'dialogue-text user-text' : 'dialogue-text';
+
+        row.innerHTML += `
+            <div class="${nameClass}">${item.name}:</div>
+            <div class="${textClass}">${item.dialogue}</div>
+        `;
+
+        container.appendChild(row);
+    });
+
+    // --- 3. LOGIKA SUARA INSTAN (ANTI DELAY) ---
+    function playVoice(text, gender) {
+        // Hentikan suara yang sedang berjalan secara instan agar tidak tumpang tindih
+        window.speechSynthesis.cancel();
+
+        // Buat objek pembaca teks baru
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US'; // Setel ke Bahasa Inggris
+
+        // Mengambil daftar suara yang tersedia di perangkat user
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Cari suara yang cocok berdasarkan gender (Bahasa Inggris)
+        let selectedVoice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes(gender));
+        
+        // Cadangan jika suara gender spesifik tidak ditemukan
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang.startsWith('en'));
+        }
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        // Jalankan suara saat itu juga
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Memicu browser agar memuat daftar suara di awal (untuk Chrome/Android kompatibilitas)
+    window.speechSynthesis.getVoices();
+</script>
+
+</body>
+</html>
