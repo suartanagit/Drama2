@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drama Drama</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eaf7f8 0%, #f4f7f6 100%);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #0d5c63;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 35px;
+            font-size: 14px;
+        }
+        .drama-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .drama-card {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 18px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            border: 1px solid #eef2f1;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+        }
+        .drama-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            border-color: #6aa5b1;
+        }
+        .drama-number {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,123,255,0.3);
+        }
+        .drama-info {
+            flex-grow: 1;
+        }
+        .drama-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #0d5c63;
+            margin-bottom: 3px;
+        }
+        .drama-desc {
+            font-size: 13px;
+            color: #777;
+        }
+        .arrow {
+            font-size: 20px;
+            color: #6aa5b1;
+            margin-left: 12px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Drama Kehidupan</h1>
+    <div class="subtitle">Pilih drama di bawah ini:</div>
+
+    <div class="drama-list">
+        <a href="drama1.html" class="drama-card">
+            <div class="drama-number">1</div>
+            <div class="drama-info">
+                <div class="drama-title">drama</div>
+                <div class="drama-desc">dramaaa</div>
+            </div>
+            <div class="arrow">›</div>
+        </a>
+
+        <a href="drama2.html" class="drama-card">
+            <div class="drama-number">2</div>
+            <div class="drama-info">
+                <div class="drama-title">Computer Maintenance and Troubleshooting</div>
+                <div class="drama-desc">A Lesson from the Office</div>
+            </div>
+            <div class="arrow">›</div>
+        </a>
+
+        <a href="drama3.html" class="drama-card">
+            <div class="drama-number">3</div>
+            <div class="drama-info">
+                <div class="drama-title">The Undercover CEO</div>
+                <div class="drama-desc">Theme: Kindness</div>
+            </div>
+            <div class="arrow">›</div>
+        </a>
+
+        <!-- Tambahkan drama lain di sini dengan pola yang sama -->
+        <!--
+        <a href="drama4.html" class="drama-card">
+            <div class="drama-number">4</div>
+            <div class="drama-info">
+                <div class="drama-title">Judul Drama 4</div>
+                <div class="drama-desc">Deskripsi singkat drama 4</div>
+            </div>
+            <div class="arrow">›</div>
+        </a>
+        -->
+    </div>
+
+    <div class="footer">© okgas</div>
+</div>
+
+</body>
+</html>

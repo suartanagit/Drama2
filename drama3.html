@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drama3 - The Undercover CEO</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .script-row {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #eef2f1;
+            background: #fff;
+            transition: background 0.2s;
+        }
+        .script-row:hover {
+            background: #fafafa;
+        }
+        .btn-play {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            min-width: 65px;
+            margin-right: 15px;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+        }
+        .btn-play:hover {
+            background-color: #0056b3;
+        }
+        .user-label {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 45px;
+            margin-right: 15px;
+            box-shadow: 0 2px 4px rgba(40,167,69,0.2);
+        }
+        .character-name {
+            font-weight: bold;
+            min-width: 140px;
+            color: #0056b3;
+            font-size: 15px;
+            padding-top: 4px;
+        }
+        .character-name.user {
+            color: #28a745;
+        }
+        .dialogue-text {
+            color: #333;
+            font-size: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
+            padding-top: 4px;
+        }
+        .dialogue-text.user-text {
+            font-style: italic;
+            color: #555;
+        }
+        .scene-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 26px 0 12px;
+        }
+        .scene-divider::before,
+        .scene-divider::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, #dfe9eb, #6aa5b1, #dfe9eb);
+            border-radius: 999px;
+        }
+        .scene-divider span {
+            background: #eaf7f8;
+            color: #0d5c63;
+            border: 1px solid #cfeaf0;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>THE UNDERCOVER CEO</h1>
+    <div class="subtitle">Klik tombol PLAY untuk mendengarkan suara aktor</div>
+    
+    <div id="script-container"></div>
+</div>
+
+<script>
+    // --- 1. DATA NASKAH DRAMA ---
+    // Properti 'gender': 'male' (suara pria) atau 'female' (suara wanita).
+    // Jika itu giliran Anda, ganti properti 'isUser': true.
+    const naskah = [
+        { name: "Narrator (Opening)", dialogue: "Good day, everyone. We present The Undercover CEO. A small act of kindness can change a life.", gender: "male", isUser: false },
+        { name: "Narrator (Scene 1: Meeting Old Friends)", dialogue: "It is a cloudy morning. Komang is walking slowly down the street, looking tired and sad. Suddenly, he meets two old friends. Let's watch.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Wait... Komang? Is that really you?", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Suartana? Yusuf?", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "It's been so long, Komang! How are you? And how is your job?", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Actually, I lost my job. My company cut employees. I haven't found a new job yet.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "I'm so sorry, Komang. Don't give up. Come with us tomorrow, and we will help you find a job.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Really? Thank you so much, my friends!", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Of course! That's what friends are for.", gender: "male", isUser: false },
+        { name: "Narrator (Scene 2: The CEO Is Jogging)", dialogue: "The next morning, a man is jogging in the park. He is Bala, the CEO of a big company. But today, he is just an ordinary man in sportswear. Let's watch.", gender: "male", isUser: false },
+        { name: "Bala", dialogue: "Ouch! Who put this stone here? My leg hurts. I can't stand up!", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Sir, are you okay? Let me help you. I'm Komang.", gender: "male", isUser: false },
+        { name: "Bala", dialogue: "Thank you, Komang. I'm Bala.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Wait, sir, is this your wallet?", gender: "male", isUser: false },
+        { name: "Bala", dialogue: "Oh, my wallet! Thank you, Komang. You are very honest.", gender: "male", isUser: false },
+        { name: "Narrator (Scene 3: Applying for a Job)", dialogue: "The following day, Suartana and Yusuf take Komang to their company to apply for a job. Will Komang get the job? Let's watch.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Oh, Bala! Good morning! How is your leg today?", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Komang! Be polite to Mr. Bala!", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Wait, how do you know Mr. Bala?", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Yesterday, he fell while jogging, so I helped him.", gender: "male", isUser: false },
+        { name: "Suartana", dialogue: "Komang, Mr. Bala is the CEO of our company!", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "What? You are the CEO? I'm so sorry, sir!", gender: "male", isUser: false },
+        { name: "Bala", dialogue: "It's okay, Komang. You helped me yesterday. What are you all doing here?", gender: "male", isUser: false },
+        { name: "Yusuf", dialogue: "Sir, we are helping Komang look for a job.", gender: "male", isUser: false },
+        { name: "Bala", dialogue: "Komang, you are accepted to work at this company.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Me? Why so easily, sir? I haven't had an interview.", gender: "male", isUser: false },
+        { name: "Bala", dialogue: "Skills can be improved here. But your honesty and empathy convinced me.", gender: "male", isUser: false },
+        { name: "Komang", dialogue: "Thank you, sir. I will work hard!", gender: "male", isUser: false },
+        { name: "Suartana & Yusuf", dialogue: "Congratulations, Komang!", gender: "male", isUser: false },
+        { name: "Narrator (Closing)", dialogue: "And so, Komang got a job because of his kind heart. Always be kind, because kindness comes back to us. Thank you for watching.", gender: "male", isUser: false },
+    ];
+
+    const container = document.getElementById('script-container');
+
+    // --- 2. RENDER HALAMAN ---
+    naskah.forEach((item, index) => {
+        const sceneMatch = (item.name + ' ' + item.dialogue).match(/Scene\s+\d+/i);
+        if (item.name.toLowerCase().includes('narrator') && sceneMatch) {
+            const divider = document.createElement('div');
+            divider.className = 'scene-divider';
+            const label = document.createElement('span');
+            label.textContent = sceneMatch[0];
+            divider.appendChild(label);
+            container.appendChild(divider);
+        }
+
+        const row = document.createElement('div');
+        row.className = 'script-row';
+
+        // Bagian Tombol Play atau Label User
+        if (item.isUser) {
+            row.innerHTML = `<span class="user-label">USER</span>`;
+        } else {
+            row.innerHTML = `<button class="btn-play" onclick="playVoice('${item.dialogue.replace(/'/g, "\\'")}', '${item.gender}')">▶ Play</button>`;
+        }
+
+        // Bagian Nama & Teks Dialog
+        const nameClass = item.isUser ? 'character-name user' : 'character-name';
+        const textClass = item.isUser ? 'dialogue-text user-text' : 'dialogue-text';
+
+        row.innerHTML += `
+            <div class="${nameClass}">${item.name}:</div>
+            <div class="${textClass}">${item.dialogue}</div>
+        `;
+
+        container.appendChild(row);
+    });
+
+    // --- 3. LOGIKA SUARA INSTAN (ANTI DELAY) ---
+    function playVoice(text, gender) {
+        // Hentikan suara yang sedang berjalan secara instan agar tidak tumpang tindih
+        window.speechSynthesis.cancel();
+
+        // Buat objek pembaca teks baru
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US'; // Setel ke Bahasa Inggris
+
+        // Mengambil daftar suara yang tersedia di perangkat user
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Cari suara yang cocok berdasarkan gender (Bahasa Inggris)
+        let selectedVoice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes(gender));
+        
+        // Cadangan jika suara gender spesifik tidak ditemukan
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang.startsWith('en'));
+        }
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        // Jalankan suara saat itu juga
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Memicu browser agar memuat daftar suara di awal (untuk Chrome/Android kompatibilitas)
+    window.speechSynthesis.getVoices();
+</script>
+
+</body>
+</html>
