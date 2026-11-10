@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drama4 - Space Crew Imposter</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .script-row {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #eef2f1;
+            background: #fff;
+            transition: background 0.2s;
+        }
+        .script-row:hover {
+            background: #fafafa;
+        }
+        .btn-play {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            min-width: 65px;
+            margin-right: 15px;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+        }
+        .btn-play:hover {
+            background-color: #0056b3;
+        }
+        .character-name {
+            font-weight: bold;
+            min-width: 140px;
+            color: #0056b3;
+            font-size: 15px;
+            padding-top: 4px;
+        }
+        .dialogue-text {
+            color: #333;
+            font-size: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
+            padding-top: 4px;
+        }
+        .scene-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 26px 0 12px;
+        }
+        .scene-divider::before,
+        .scene-divider::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, #dfe9eb, #6aa5b1, #dfe9eb);
+            border-radius: 999px;
+        }
+        .scene-divider span {
+            background: #eaf7f8;
+            color: #0d5c63;
+            border: 1px solid #cfeaf0;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SPACE CREW IMPOSTER</h1>
+    <div class="subtitle">Klik tombol PLAY untuk mendengarkan suara aktor</div>
+
+    <div id="script-container"></div>
+</div>
+
+<script>
+    const naskah = [
+        { name: "Narrator", dialogue: "Act 1 (First Day of the New Recruits)", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Welcome aboard the orbital maintenance spaceship. Today is the first day for six new IT recruits working under their senior manager, Janu.", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Welcome to our spaceship, new recruits! I am Janu, your Manager. Today, each of you will work in your own room to maintain our satellite.", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Jati is our Network Administrator, and Satya is in Cybersecurity. You two will share the Network Room to keep our connection to Earth safe.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Thank you, Manager Janu! I will make sure our satellite signal to Earth stays strong all day!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "And I will guard the firewall in our room so no virus or hacker can disturb Jati's network!", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Bayu is Software Manager, Mirah is Database Administrator, Diandra is our Asteroid Watcher, and Suartana is our ship Technician. Good luck, everyone!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Ready, boss! All power circuits, oxygen pipes, and room lights are under my control!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "I will watch the radar screen carefully so no space rock or foreign object hits our ship!", gender: "female", isUser: false },
+        { name: "RAMA", dialogue: "During the first few hours, everything runs smoothly. On their break time, the recruits hang out at the ship cafe and visit each other's workstations.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Bayu, my best friend! Can you believe it? Yesterday we were college students, and today we are working on a real spaceship!", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "I know, Jati! We promised to work together after graduation, and we made it! How is your Network Room so far?", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "It is very easy! The connection to Earth is super fast. Later tonight, let us play video games in my cabin, Bayu!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "Hello, guys! I brought some cookies from the kitchen. Since we are all new recruits, I hope we can become like a big family here!", gender: "female", isUser: false },
+        { name: "JATI", dialogue: "Wow, thank you, Mirah! You are so kind. How is your Database room? Is it lonely working there by yourself?", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "It is a bit quiet, Jati, but I enjoy organizing the data tables. Oh, look, Diandra is coming from the Asteroid Radar room!", gender: "female", isUser: false },
+        { name: "DIANDRA", dialogue: "Hey everyone! Watching space rocks for two hours makes my eyes tired. Can I join you guys for a cup of hot tea?", gender: "female", isUser: false },
+        { name: "SATYA", dialogue: "Sure, Diandra! Sit here. By the way, Jati, you left your jacket on my Cybersecurity desk earlier.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Oh, thank you, Satya! You are a very neat roommate. I always forget where I put my things!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Checking every lamp is good exercise! Hey Satya, is your room light bright enough?", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "It is bright, Suartana, thank you! Only the hallway lamp near my door flickered once this morning.", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Noted! After coffee, I will check the main circuit box to keep the voltage stable.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Alright, break time is almost over! Come on, Satya, let us go back to the Network Room before Manager Janu checks on us!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Right behind you, Jati! See you guys at dinner time!", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Before returning to their own desks, some crewmates stop by each other's workstations to say hello and check the new equipment.", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "Hey Jati and Satya! I just stopped by your room to check if my software update is running smoothly on your computers.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "It runs super smooth, Bayu! Look, your new software makes my network graph look very clean and easy to read.", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Yes, Bayu, the security software on my desk is also updated. You did a great job as Software Manager!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Wow, your room has so many monitors, Jati! In my Asteroid Radar Room, I only have one big telescope screen.", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "It looks very cool here! If you ever need data from the Database Room, just call me anytime, Jati and Satya!", gender: "female", isUser: false },
+        { name: "JATI", dialogue: "Thank you, Mirah and Diandra! Feel free to visit our Network Room whenever you have free time!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Excuse me, Manager Janu! I just finished inspecting the hallway lamps near the Database and Radar rooms.", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Good work, Suartana. Keep checking the electrical circuits regularly so our first day goes without any trouble.", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Do not worry, Manager! I know every wire and switch on this ship like the back of my hand!", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Alright, visitors, time for us to focus! I have to send the afternoon satellite report to Earth Base now.", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "And I will run the daily virus scan while you send the report, Jati. Let us get to work!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "See you later, guys! Come on, Mirah, let us walk back to our rooms on the east wing.", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "Coming, Diandra! Have a great shift, everyone!", gender: "female", isUser: false },
+
+        { name: "Narrator", dialogue: "Act 2 (Network Sabotage & The Fatal Short Circuit)", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Suddenly, the peaceful atmosphere shatters. A mysterious sabotage hits the ship's network, cutting off all communication with Earth.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "What is going on?! Satya, look at my monitor! Our satellite connection to Earth just dropped to zero!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Wait, let me check my Cybersecurity monitor! Strange... my firewall shows no outside attack at all.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "If there is no outside attack, why can we not contact Earth?! Someone changed our internal network configuration!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Look, Jati, the lamp in our room is flickering again! Maybe the electrical power to your router is unstable.", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "You are right! Please go find Suartana and ask him about the lights. I will stay here and reset the network IP!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Okay, I have checked Cybersecurity and everything is safe here. Stay at your desk, Jati, I will go find Suartana now!", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Come on, server, reconnect to Earth... Why is the system locking me out from the main router?!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Huh? Why is the voltage dropping? Let me connect the blue ground wire to the negative terminal...", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Little does Suartana know, the Imposter has secretly swapped the wire colors inside the panel. Suartana is holding the wrong cable.", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Wait... why does this ground wire spark?! Someone changed the wire colors! It is on the positive terminal—AAAH!", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "What was that loud bang?! The lights are going out! Wait... who just opened my room door in the dark?!", gender: "male", isUser: false },
+        { name: "JATI", dialogue: "Hey, is that you, Satya? Or Bayu? Why are you coming closer without a flashlight—ugh!", gender: "male", isUser: false },
+
+        { name: "Narrator", dialogue: "Act 3 (The Missing Engineer & First Emergency Meeting)", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "In the pitch-black darkness, the Imposter silently kills the Network Administrator. When the backup lights return, Manager Janu calls everyone to the meeting room.", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Listen up, everyone! How could a fatal short circuit and network failure happen on your very first day?!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "I am so sorry, Manager Janu! Someone swapped the wire colors, so I accidentally connected ground to positive!", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Swapped the wire colors?! Wait a minute... count heads! Where is Jati, our Network Administrator?! Why is he not at this meeting?!", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "That is strange! Jati is always on time. Everyone, let us spread out and search for Jati right now!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "Oh my goodness! Somebody help me! Bayu, come here quickly! Jati is not breathing in front of his computer!", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "Jati?! No, not my best friend! Help me carry his body to the meeting room, Mirah!", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "He was murdered during the blackout! Listen to me carefully: one of you does not really work here. One of you is an Imposter sent to kill all of us!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "An Imposter among us?! Everyone, state your alibi right now! I was in the Asteroid Radar Room the whole time!", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "Wait! Satya, you work in the exact same room with Jati! Where were you when my best friend was killed?!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Calm down, Bayu! Before the blackout, I checked the Cybersecurity system and it was completely safe, so I left the room to find Suartana and ask about the flickering lights!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Wait, Satya... you said you came looking for me, but I never saw you at the circuit box before the lights went out!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Because the ship went completely dark while I was still in the hallway, Suartana! I swear I did not kill Jati!", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "That is a weak excuse, Satya! You were the last person with Jati in the Network Room!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "Please stop fighting, Bayu and Satya! We have no proof yet. If we accuse each other out of anger, the real killer will be happy!", gender: "female", isUser: false },
+        { name: "SUARTANA", dialogue: "Mirah is right, guys. Fighting will not bring Jati back or fix our satellite.", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Yes, let us stay alert and always lock our doors from the inside while we work.", gender: "female", isUser: false },
+        { name: "RAMA", dialogue: "Thanks to Mirah's wise words and the Manager's command, the heated argument cools down for now.", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "Mirah is right. Step back, Bayu! For now, Satya, since you know the Network Room, you must cover Jati's job until we fix the connection to Earth!", gender: "male", isUser: false },
+
+        { name: "Narrator", dialogue: "Act 4 (Bayu's Suspicion & Satya's Ejection)", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "The crew returns to work, but trust is broken. Heartbroken over his best friend Jati's death, Bayu secretly watches every move Satya makes.", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Why is Jati's network terminal still locked with a strange code? Wait... what is this hidden device under Jati's keyboard?", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "Look at Satya! Why is he looking around nervously and hiding something under Jati's desk?! I knew we could not trust him!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Bayu, why are you standing outside the Network Room instead of checking your software?", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "Come with me, Diandra! Hey Satya, step away from that desk! Show us what is in your hand right now!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "Wait, Bayu! I just found this network jammer and spare wire under the desk a second ago! I was trying to inspect it!", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "Liar! Everyone, come to the Meeting Room! I caught Satya red-handed with the network jammer and the swapped circuit wires!", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "A hardware network jammer and swapped colored wires at your desk, Satya?! This is concrete evidence!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Yes! Those are the exact wire labels swapped in my electrical box! Satya caused the short circuit!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "Oh, Satya... I defended you in the first meeting because I believed in you. Why would you do this to Jati and all of us?", gender: "female", isUser: false },
+        { name: "SATYA", dialogue: "No! Somebody planted those things at the Network desk before I got there! You are all being tricked by the real Imposter!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "I cannot believe you sabotaged my circuit panel, Satya! I vote to throw you out!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "It hurts my heart to vote out a teammate, Manager Janu, but we must protect the remaining crew.", gender: "female", isUser: false },
+        { name: "JANU", dialogue: "Everyone has spoken. We cannot keep a dangerous saboteur aboard this ship any longer!", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Fooled by the planted evidence, the entire crew unites against Satya, sealing the innocent engineer's fate.", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "The evidence in your hands is undeniable, Satya. For Jati's justice, I vote to eject Satya!", gender: "female", isUser: false },
+        { name: "JANU", dialogue: "By majority decision, Satya, you are ejected from this spaceship! Open the airlock door!", gender: "male", isUser: false },
+        { name: "SATYA", dialogue: "I am innocent! Mark my words, the real killer is still smiling inside this room!", gender: "male", isUser: false },
+
+        { name: "Narrator", dialogue: "Act 5 (Oxygen Sabotage & The CCTV Trap)", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Everyone believes the nightmare is finally over. However, a few minutes later, the oxygen sabotage alarm echoes across the ship.", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "What?! The Oxygen tank is sabotaged?! If Satya was the Imposter, why is there another sabotage?!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "We only have two minutes of air left! I will run to the Oxygen Room first!", gender: "male", isUser: false },
+        { name: "SUARTANA", dialogue: "Okay, I reached the Oxygen valve! Wait... who is behind the pipe?! What are you doing here—ugh!", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "When the others arrive at the Oxygen Sector, Suartana is already dead on the floor. Seconds later, Mirah arrives from the far hallway, looking shocked.", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Oh no! Suartana is dead right in front of the Oxygen tank! That means Satya was innocent all along!", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "Hahh... hahh... Guys, I ran all the way from the Database Room! Oh my God, did something happen to Suartana?!", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "Someone killed Suartana before we got here and escaped! Wait... where is Manager Janu?!", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "EMERGENCY MEETING! Everyone to the table right now! I was watching the Security Camera, and I saw the killer with my own eyes!", gender: "male", isUser: false },
+        { name: "JANU", dialogue: "It is MIRAH! On the CCTV monitor, I saw Mirah jump into the Oxygen vent and crawl out in the far hallway so she could pretend she just arrived!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "What?! Manager Janu, why are you lying about me?! Bayu, Diandra, think carefully: why was Janu hiding alone instead of helping Suartana fix the oxygen?!", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "Only the Manager has the master key to all vents and the circuit wire diagram! Janu killed Suartana, used the vent to reach the Camera Room, and now blames me!", gender: "female", isUser: false },
+        { name: "JANU", dialogue: "Are you crazy, Mirah?! I am the Senior Manager of this ship! Why would I sabotage my own mission?!", gender: "male", isUser: false },
+        { name: "BAYU", dialogue: "Wait... Mirah makes total sense! Janu pushed us to eject Satya earlier, and Janu was the only one not with us when Suartana died!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "And Mirah has been nothing but kind and helpful since morning! It must be you, Manager Janu! Bayu, help me throw him out the airlock!", gender: "female", isUser: false },
+        { name: "JANU", dialogue: "No! Let go of me, you fools! I saw her come out of the vent! When she kills both of you, do not say I did not warn you!", gender: "male", isUser: false },
+
+        { name: "Narrator", dialogue: "Act 6 (The Breaker Split & The Shocking Reveal)", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "Only three survivors remain: Mirah, Bayu, and Diandra. They try to keep the ship running, but suddenly, the unstable voltage forces both the North and South breakers to shut down.", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Oh no, the electricity is dead again! Usually Suartana handles this, but now both the North Breaker and South Breaker are forced shut!", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "To restart the power, someone must pull the North Breaker and South Breaker switches at the exact same time! What should we do?!", gender: "male", isUser: false },
+        { name: "MIRAH", dialogue: "Listen to me, guys. Maybe Janu was telling the truth that an Imposter is still among the three of us. This breaker task will prove who the real Imposter is!", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "Diandra and I will go together to the North Breaker, and Bayu will go to the South Breaker. If Diandra or I die, the survivor is the Imposter; if neither of us dies, then Bayu is the Imposter! We will stay connected on walkie-talkies!", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "That is a very fair and smart plan, Mirah! Keep your walkie-talkie on, Diandra. I am heading to the South Breaker right now!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Copy that, Bayu! Mirah and I have arrived at the North Breaker panel. Are you in front of the South Breaker yet, over?", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "Yes, Diandra, I am at the South Breaker! Count to three on the walkie-talkie, and we will pull the switches together, over!", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Okay, get ready, Bayu! One... two... three... PULL THE SWITCH NOW!", gender: "female", isUser: false },
+        { name: "BAYU", dialogue: "WAIT! THE SOUTH BREAKER WIRE IS RIGGED WITH HIGH VOLTAGE! IT IS A TRAP—AAAAARGH!", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "A terrifying scream echoes through the walkie-talkie before the connection goes dead. Diandra and Mirah rush to the South Breaker, only to find Bayu electrocuted on the floor.", gender: "male", isUser: false },
+        { name: "DIANDRA", dialogue: "Bayu?! No, Bayu, wake up! He was electrocuted by the breaker! Mirah, why is everyone dying around us?!", gender: "female", isUser: false },
+        { name: "DIANDRA", dialogue: "Ack—! Mi... Mirah?! What are you doing with this rope?! Wait... Manager Janu was right... YOU are the Imposter—ugh!", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "Shhh... stop crying, Diandra. Yes, I swapped the circuit wires, I killed Jati and Suartana, I planted the evidence on Satya, and I rigged Bayu's breaker.", gender: "female", isUser: false },
+        { name: "MIRAH", dialogue: "All it took to fool six smart crewmates was a sweet smile and a little bit of fake wisdom. Now, the entire spaceship is mine!", gender: "female", isUser: false },
+        { name: "RAMA", dialogue: "Diandra takes her final breath. One by one, every single crewmate has fallen into the hands of the person they trusted the most.", gender: "male", isUser: false },
+        { name: "RAMA", dialogue: "In the cold silence of space, the kind and wise Database Administrator stands alone as the ultimate Imposter. The End.", gender: "male", isUser: false }
+    ];
+
+    const container = document.getElementById('script-container');
+
+    naskah.forEach((item) => {
+        const sceneMatch = item.dialogue.match(/Act\s+\d+/i);
+        if (item.name.toLowerCase() === 'narrator' && sceneMatch) {
+            const divider = document.createElement('div');
+            divider.className = 'scene-divider';
+            const label = document.createElement('span');
+            label.textContent = sceneMatch[0];
+            divider.appendChild(label);
+            container.appendChild(divider);
+        }
+
+        const row = document.createElement('div');
+        row.className = 'script-row';
+
+        row.innerHTML = `
+            <button class="btn-play" onclick="playVoice('${item.dialogue.replace(/'/g, "\\'")}', '${item.gender}')">▶ Play</button>
+            <div class="character-name">${item.name}:</div>
+            <div class="dialogue-text">${item.dialogue}</div>
+        `;
+
+        container.appendChild(row);
+    });
+
+    function playVoice(text, gender) {
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes(gender));
+
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang.startsWith('en'));
+        }
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    window.speechSynthesis.getVoices();
+</script>
+
+</body>
+</html>
